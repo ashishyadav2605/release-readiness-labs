@@ -27,12 +27,12 @@ jobs:
           npm install
           npm test
 
-deploy-production:
-  needs: validate_release
-  if: github.event.name == 'workflow.dispatch'
-  runs-on: ubuntu-latest
-  environment: production
-  steps:
-    - uses: actions/checkout@v4
-    - name: Verify release
-      run: echo "Release 2.3.0 validated; production deployment not executed"
+  deploy-production:
+    needs: validate_release
+    if: github.event.name == 'workflow.dispatch'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify release
+        run: echo "Release 2.3.0 validated; production deployment not executed"
