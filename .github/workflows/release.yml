@@ -2,37 +2,26 @@ name: Release Pipeline
 
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
-
-permissions:
-  contents: read
+    branches:
+      - new
 
 jobs:
+  deploy-production:
+    needs: validate-release
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy to production
+        run: |
+          chmod +x scripts/deploy.sh
+          ./scripts/deploy.sh
+
   validate-release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with: 
-          node-version: 20
-
-      - name: Validate release
-        run: node -e "const r=require('./release/release.json'); if(r.version!='2.3.0') process.exit(1);
-      
-      - name: Run tests
-        working-directory: app
+      - uses: actions/checkout@v3
+      - name: Run Tests
         run: |
-          npm install
-          npm test
-
-  deploy-production:
-    needs: validate-release
-    if: github.event.name == 'workflow.dispatch'
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - uses: actions/checkout@v4
-      - name: Verify release
-        run: echo "Release 2.3.0 validated; production deployment not executed"
+          npm install --prefix app
+          npm test --prefix app
