@@ -22,7 +22,7 @@ jobs:
         run: node -e "const r=require('./release/release.json'); if(r.version!='2.3.0') process.exit(1);
       
       - name: Run tests
-        working_directory: app
+        working-directory: app
         run: |
           npm install
           npm test
