@@ -28,7 +28,7 @@ jobs:
           npm test
 
   deploy-production:
-    needs: validate_release
+    needs: validate-release
     if: github.event.name == 'workflow.dispatch'
     runs-on: ubuntu-latest
     environment: production
